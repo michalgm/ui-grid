@@ -417,6 +417,14 @@
           gridOptions.enableSelectAll = gridOptions.enableSelectAll !== false;
           /**
            *  @ngdoc object
+           *  @name enableSelectAllAutoUpdate
+           *  @propertyOf  ui.grid.selection.api:GridOptions
+           *  @description Auto-update the selectAll state as rows are selected/unselected
+           *  <br/>Defaults to true
+           */
+          gridOptions.enableSelectAllAutoUpdate = gridOptions.enableSelectAllAutoUpdate !== false;
+          /**
+           *  @ngdoc object
            *  @name enableSelectionBatchEvent
            *  @propertyOf  ui.grid.selection.api:GridOptions
            *  @description If selected rows are changed in bulk, either via the API or
@@ -491,9 +499,11 @@
             if (row.isSelected === true) {
               grid.selection.lastSelectedRow = row;
             }
-
-            selectedRows = service.getSelectedRows(grid);
-            grid.selection.selectAll = grid.rows.length === selectedRows.length;
+            
+            if (grid.options.enableSelectAllAutoUpdate) {
+              selectedRows = service.getSelectedRows(grid);
+              grid.selection.selectAll = grid.rows.length === selectedRows.length;
+            }
 
             grid.api.selection.raise.rowSelectionChanged(row, evt);
           }
